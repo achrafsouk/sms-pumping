@@ -305,7 +305,7 @@ const wafRules = [
                         {
                             geoMatchStatement: {
                                 countryCodes: [
-                                    "BE", "SE"
+                                    "SB", "MH"
                                 ]
                             }
 

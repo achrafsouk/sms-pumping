@@ -25,9 +25,9 @@ const THREAT_ACTIONS = { 'BLOCK': 0, 'PASS': 1 };
 // Threat evaluation parameters
 const EVALUATION_WINDOW_DURATION = 86400; // 1 day
 const SUFFIX_LENGTH = 3;
-const PHONE_COUNTRY_BLACKLIST = ['AR', 'BE']; // e.g. Countries with high SMS cost delivery, where you are not operating at all https://s3.amazonaws.com/aws-messaging-pricing-information/TextMessageOutbound/prices.json 
+const PHONE_COUNTRY_BLACKLIST = ['MH', 'SB']; // e.g. Countries with high SMS cost delivery, where you are not operating at all https://s3.amazonaws.com/aws-messaging-pricing-information/TextMessageOutbound/prices.json 
 const PHONE_TYPE_BLACKLIST = ['LANDLINE', 'VOIP', 'INVALID', 'OTHER']; // Only allow MOBILE and PREPAID
-const CORE_COUNTRIES = ['AE', 'SE']; // Countries where most of SMS OTPs are supposed to come from, and go to.
+const CORE_COUNTRIES = ['AE', 'SA', 'EG']; // Countries where most of SMS OTPs are supposed to come from, and go to.
 const THREAT_WEIGHTS = { 'IP_NON_CORE_COUNTRY': 1.25, 'BOT_SIGNAL': 2, 'ANONYMIZING_IP': 1.5, 'DATACENTER_IP': 1.4, 'PHONE_NON_CORE_COUNTRY': 1.25, 'IP_VELOCITY': 2, 'PHONE_VELOCITY': 2, 'PHONE_PREFIX_VELOCITY': 2, 'SESSION_VELOCITY': 2 };
 const VELOCITY_THRESHOLD = { 'PHONE_VELOCITY_THRESHOLD': 5, 'IP_VELOCITY_THRESHOLD': 5, 'PHONE_PREFIX_VELOCITY_THRESHOLD': 10 };
 const RISK_REFERENCE = { 'LOW': 1.25, 'MEDIUM': 2 };
