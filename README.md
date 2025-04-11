@@ -20,4 +20,11 @@ When the request is received by Lambda@Edge, it will apply the following types o
 * Apply some velocity checks on a large time window, e.g. how many attempts were made from the same IP in the last 24 hours? to the same number? to the same number prefix? To do that, attempt information is stored and queried in DynamoDB tables.
 * Apply some filtering based on calculated risk scores, based on different threat signals
 
+## Deployment steps
   
+```
+git clone https://github.com/achrafsouk/sms-pumping.git
+cd sms-pumping
+npm install
+cdk deploy
+```
