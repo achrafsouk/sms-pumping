@@ -1,7 +1,7 @@
 export const handler = async (event) => {
   console.log(event);
   var response = {
-    'sms-risk' : event.headers['sms-risk']
+    'threats-detected' : event.headers['x-sms-threat']
   };
 
   

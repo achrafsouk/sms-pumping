@@ -67,13 +67,14 @@
           'Content-Type': 'application/json'
         }
       }).then(response => {
-        if (response.status == 403) {
-          container.innerHTML = 'Blocked 403';
-        } else {
+        try {
           response.json().then(myJson => {
-          container.innerHTML = 'Response JSON = ' + JSON.stringify(myJson);
-        });
+            container.innerHTML = JSON.stringify(myJson);
+          });
+        } catch (err) {
+          container.innerHTML = `Error: ${err.message}`;
         }
+        
       });
     }
   </script>

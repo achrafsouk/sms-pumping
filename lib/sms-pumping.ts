@@ -60,6 +60,12 @@ export class SMSPumpingStack extends cdk.Stack {
                 metricName: "SMSPumpingWebACL",
                 sampledRequestsEnabled: false,
             },
+            customResponseBodies: {
+                ErrorJson: {
+                    contentType: 'APPLICATION_JSON',
+                    content: '{"WAF": "Blocked by AWS WAF, check x-reason header to learn more."}',
+                },
+            },
             rules: wafRules.map((wafRule) => wafRule.Rule),
         });
 
@@ -192,8 +198,49 @@ const wafRules = [
                     name: "AWSManagedRulesAmazonIpReputationList",
                     ruleActionOverrides: [
                         {
+                            name: "AWSManagedIPReputationList",
+                            actionToUse: { block: {
+                                customResponse: {
+                                    responseCode: 403,
+                                    customResponseBodyKey: 'ErrorJson',
+                                    responseHeaders: [
+                                        {
+                                         name: "x-reason",
+                                         value: "AWSManagedIPReputationList"
+                                        }
+                                    ]
+                                  },
+                            } }
+                        },
+                        {
+                            name: "AWSManagedReconnaissanceList",
+                            actionToUse: { block: {
+                                customResponse: {
+                                    responseCode: 403,
+                                    customResponseBodyKey: 'ErrorJson',
+                                    responseHeaders: [
+                                        {
+                                         name: "x-reason",
+                                         value: "AWSManagedReconnaissanceList"
+                                        }
+                                    ]
+                                  },
+                            } }
+                        },
+                        {
                             name: "AWSManagedIPDDoSList",
-                            actionToUse: { block: {} }
+                            actionToUse: { block: {
+                                customResponse: {
+                                    responseCode: 403,
+                                    customResponseBodyKey: 'ErrorJson',
+                                    responseHeaders: [
+                                        {
+                                         name: "x-reason",
+                                         value: "AWSManagedIPDDoSList"
+                                        }
+                                    ]
+                                  },
+                            } }
                         }
                     ]
                 }
@@ -243,7 +290,19 @@ const wafRules = [
         Rule: {
             name: "validate-phone-format",
             priority: 4,
-            action: { block: {} },
+            action: { block: {
+                customResponse: {
+                    responseCode: 403,
+                    customResponseBodyKey: 'ErrorJson',
+                    responseHeaders: [
+                        {
+                         name: "x-reason",
+                         value: "Invalid phone format"
+                        }
+                    ]
+                  },
+                }  
+            },
             statement: {
                 andStatement: {
                     statements: [
@@ -292,7 +351,19 @@ const wafRules = [
         Rule: {
             name: "block-banned-ip-countries",
             priority: 5,
-            action: { block: {} },
+            action: { block: {
+                customResponse: {
+                    responseCode: 403,
+                    customResponseBodyKey: 'ErrorJson',
+                    responseHeaders: [
+                        {
+                         name: "x-reason",
+                         value: "Banned country"
+                        }
+                    ]
+                  },
+                }  
+            },
             statement: {
                 andStatement: {
                     statements: [
@@ -326,7 +397,7 @@ const wafRules = [
             priority: 6,
             statement: {
                 rateBasedStatement: {
-                    limit: 10,
+                    limit: 30,
                     evaluationWindowSec: 600,
                     aggregateKeyType: "IP",
                     scopeDownStatement: {
@@ -337,7 +408,19 @@ const wafRules = [
                     }
                 }
             },
-            action: { block: {} },
+            action: { block: {
+                customResponse: {
+                    responseCode: 429,
+                    customResponseBodyKey: 'ErrorJson',
+                    responseHeaders: [
+                        {
+                         name: "x-reason",
+                         value: "Rate limited"
+                        }
+                    ]
+                  },
+                }  
+            },
             visibilityConfig: {
                 sampledRequestsEnabled: true,
                 cloudWatchMetricsEnabled: true,
@@ -589,7 +672,19 @@ const wafRules = [
         Rule: {
             name: "block-request-with-no-valid-token",
             priority: 8,
-            action: { block: {} },
+            action: { block: {
+                customResponse: {
+                    responseCode: 403,
+                    customResponseBodyKey: 'ErrorJson',
+                    responseHeaders: [
+                        {
+                         name: "x-reason",
+                         value: "Invalid token"
+                        }
+                    ]
+                  },
+                }  
+            },
             statement: {
                 andStatement: {
                     statements: [
