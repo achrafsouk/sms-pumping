@@ -169,7 +169,7 @@ function getRiskScore(requestSignals) {
 
   riskElements.push(`score=${score}`);
 
-  const elements = riskElements.threats.join('-');
+  const elements = riskElements.join('-');
 
   return {score, elements};
 }
