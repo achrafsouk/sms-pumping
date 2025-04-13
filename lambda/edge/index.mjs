@@ -165,6 +165,8 @@ function getRiskScore(requestSignals) {
     riskElements.push("SESSION_VELOCITY");
   }
 
+  score = Math.round(score * 100) / 100;
+
   logInfo(`Calculated score = ${score}`);
 
   riskElements.push(`score=${score}`);
