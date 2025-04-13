@@ -20,7 +20,17 @@ cd sms-pumping
 npm install
 cdk deploy
 ```
-At this stage, the code is experimental, and still being tested and worked on. It's not intented to be a production ready code, but rather to explain the different mitigation techniques through an example.
+
+Follow the steps in the landing page to test the protections.
+
+>  At this stage, the code is experimental, and still being tested and worked on. It's not intented to be a production ready code, but rather to explain the different mitigation techniques through an example.
+
+## Price considerations
+
+The major cost component in this solution is the [API call to PinPoint](https://aws.amazon.com/end-user-messaging/pricing/), $0.006 for each phone number validate request. Depending on your destination country, this cost might be significant or not. For example, the cost of sending an SMS to the UAE is $0.10809, making the cost to Pinpoint accounting to 5% of the SMS sending cost. In a country like the USA where SMS sending is cheaper, the percentage is considerably higher.
+
+If the protections provided by the logic based on Pinpoint is not needed for you, the cost of the other protections is orders of magnitude less. 
+
 
 ## In-depth technical information
 
@@ -38,10 +48,15 @@ At this stage, the code is experimental, and still being tested and worked on. I
 * **[DynamoDB]** Items are created in DynamoDB tables with a configurable TTL of 1 week, afterwhich they are deleted to save storage cost.
 
 Customize the following paramters to adapt it to your business and risk appetite:
-* **[AWS WAF]** Rate limit paramters. Default is 10 requests in the last 10 mins.
+* **[AWS WAF]** Rate limit parameters. Default is 30 requests in the last 10 mins.
 * **[AWS WAF]** Country list from which IPs are banned. Example default is Marshall Islands and Solomon Islands. 
 * **[AWS WAF]** Accepted phone format. Default is E.164 format
 * **[Lambda@Edge]** Fill the different list of countries: ```PHONE_COUNTRY_BLACKLIST``` (Example default 'SB', 'MH'), and ```CORE_COUNTRIES``` (Example default 'AE', 'SA', 'EG')
 * **[Lambda@Edge]** Adjust banned phone types in ```PHONE_TYPE_BLACKLIST```. Default is 'LANDLINE', 'VOIP', 'INVALID', 'OTHER'.
 * **[Lambda@Edge]** For velocity checks, customize the length of suffix used to derive phone prefix used in one of the check using the paramter ```SUFFIX_LENGTH```, customze the evaluation window using the paramter ```EVALUATION_WINDOW_DURATION``` defaulting to 1 day, and the the velocity thresholds in parameter ```VELOCITY_THRESHOLD``` used as reference to calaculate the velocity of a metric.
 * **[Lambda@Edge]** Customize the paramters used in risk score calculation: ```THREAT_WEIGHTS``` and ```RISK_REFERENCE```
+
+## Additional ideas for enhanced protections
+
+* Increase risk score if the country of the request IP does not match the country of the destination phone
+* Add dimensions to velocity checks, for example by including a feedback loop from the application: How many requests from this IP did not result in a succefful workflow (e.g. a completed login)

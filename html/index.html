@@ -1,84 +1,170 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OTP Verification</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 480px;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      color: #2c3e50;
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    h2 {
+      color: #34495e;
+      font-size: 1.25rem;
+      margin-top: 0;
+    }
+
+    .phone-section {
+      margin-bottom: 2rem;
+    }
+
+    .phone-input {
+      display: flex;
+      margin-bottom: 1rem;
+    }
+
+    input[type="tel"] {
+      flex: 1;
+      padding: 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    .notification {
+      margin-top: 1rem;
+      padding: 0.75rem;
+      border-radius: 4px;
+      background-color: #e8f4fd;
+      color: #3498db;
+      display: none;
+    }
+
+    .info-section {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: #f8f9fa;
+      border-radius: 6px;
+      border-left: 4px solid #3498db;
+    }
+
+    .info-section ol {
+      margin-top: 0.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .info-section li {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+  </style>
 </head>
-<script type='text/javascript' src='SDKPLACEHOLDERchallenge.compact.js' defer></script>
-
-<style>
-  .header {
-    background-color: #0066cc;
-    width: "100%";
-    font-family: "Verdana";
-    color: white;
-    font-size: xxx-large;
-    text-align: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-
-  .ui {
-    background-color: #3489dd;
-    width: "100%";
-  }
-
-  .button {
-    height: 60px;
-  }
-
-  .buttonContainer {
-    height: 500px;
-    padding-left: 10px;
-    padding-right: 30px;
-  }
-
-  #container {
-    font-family: 'Verdana';
-    color: white;
-    font-size: large;
-  }
-</style>
 
 <body>
+  <script type='text/javascript' src='SDKPLACEHOLDERchallenge.compact.js' defer></script>
+  <div class="container">
+    <header>
+      <h1>OTP Verification</h1>
+    </header>
 
-  <div class='header'>OTP Verification</div>
-  <div class="ui">
-    <table>
-      <tr>
-        <td><label for="phone">Enter phone</label></td>
-        <td class='buttonContainer'><input type="text" id="phone" name="phone" value="+971523435432" /></td>
-        <td class='buttonContainer'><button class='button' onclick='userAction()'>Send OTP</button></td>
-        <td>
-          <p id='container'></p>
-        </td>
-      </tr>
-    </table>
+    <div class="phone-section">
+      <label for="phone">Enter your phone number:</label>
+      <div class="phone-input">
+        <input type="tel" id="phone" value="+971523435432">
+      </div>
+      <button id="sendOtp">Send OTP</button>
+      <div id="notification" class="notification"></div>
+    </div>
+
+    <div class="info-section">
+      <h2>Demo testing scenarios</h2>
+      <ol>
+        <li>Requests to a phone number with bad format will be blocked by WAF</li>
+        <li>Curling the API without a valid token will </li>
+        <li>Requests to a phone number that does not correspond to mobile network will be detected</li>
+        <li>Sending multiple requests from the same IP, or to the same phone number or phone number prefix will result in a velocity detection</li>
+        <li>Using a VPN or a Datacenter network to send the request will be detected</li>
+        <li>Sending an elevated number of requests from the same IP in a short duration will be blocked by WAF with rate limit</li>
+      </ol>
+    </div>
   </div>
 
   <script>
-    function userAction() {
-      const container = document.getElementById('container');
-      const phone = document.getElementById('phone');
-      container.innerHTML = '';
+    document.getElementById('sendOtp').addEventListener('click', function () {
+      const phoneNumber = document.getElementById('phone').value;
+      const notification = document.getElementById('notification');
+
       AwsWafIntegration.fetch("api/", {
         method: 'POST',
-        body: JSON.stringify({phone : phone.value}),
+        body: JSON.stringify({ phone: phone.value }),
         headers: {
           'Content-Type': 'application/json'
         }
       }).then(response => {
-        try {
+        if (response.status == 403) {
+          notification.textContent = '403 Error - Blocked';
+          notification.style.backgroundColor = '#ffecec';
+          notification.style.color = '#e74c3c';
+        } else {
           response.json().then(myJson => {
-            container.innerHTML = JSON.stringify(myJson);
+            notification.textContent = JSON.stringify(myJson);
+            notification.style.backgroundColor = '#e8f8f5';
+            notification.style.color = '#27ae60';
           });
-        } catch (err) {
-          container.innerHTML = `Error: ${err.message}`;
         }
-        
       });
-    }
-  </script>
 
+
+
+      notification.style.display = 'block';
+
+    });
+  </script>
 </body>
 
 </html>

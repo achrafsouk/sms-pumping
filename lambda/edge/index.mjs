@@ -283,6 +283,7 @@ function logError(message) {
   log(2, message);
 }
 
+// TODO work backwards from log insights queries to format the log
 function log(level, message) {
   if ((level == 1) && level >= LOG_LEVEL) console.log(message);
   if ((level == 2) && level >= LOG_LEVEL) console.error(message);
