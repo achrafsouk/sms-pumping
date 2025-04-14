@@ -129,7 +129,7 @@
         <li>Requests to a phone number that does not correspond to mobile network will be detected: e.g. try +971823435432</li>
         <li>Sending multiple requests from the same IP, or to the same phone number or phone number prefix will result in a velocity detection. <br>Try different combinations and check the evolution of the risk score</li>
         <li>Using a VPN or a datacenter network to send the request will be detected.</li>
-        <li>Sending a request from an IP or to a phone number that is not in the core business countries (UAE, KSA, Egypt) will be detected.</li>
+        <li>Sending a request from an IP or to a phone number that is not in the core business countries (UAE, KSA, Egypt) will be detected: e.g. +33623234323.</li>
         <li>Sending a request to a phone number in banned countries will be detected: e.g. try +6922353243</li>
         <li>Sending an elevated number of requests from the same IP in a short duration will be blocked by WAF with rate limit, before even going to velocity checks.</li>
       </ol>
