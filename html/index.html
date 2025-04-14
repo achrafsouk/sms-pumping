@@ -124,12 +124,14 @@
     <div class="info-section">
       <h2>Demo testing scenarios</h2>
       <ol>
-        <li>Requests to a phone number with bad format will be blocked by WAF</li>
-        <li>Curling the API without a valid token will be blocked by WAF</li>
-        <li>Requests to a phone number that does not correspond to mobile network will be detected</li>
-        <li>Sending multiple requests from the same IP, or to the same phone number or phone number prefix will result in a velocity detection</li>
-        <li>Using a VPN or a Datacenter network to send the request will be detected</li>
-        <li>Sending an elevated number of requests from the same IP in a short duration will be blocked by WAF with rate limit</li>
+        <li>Only requests with expected format will be allowed by WAF: e.g. try 971523435432</li>
+        <li>Calling the OTP API without a valid Bot Control token will be blocked by WAF: e.g. <br><i>curl https://xyz.cloudfront.net/api/  --data-raw '{"phone":"+971523435432"}'</i></li>
+        <li>Requests to a phone number that does not correspond to mobile network will be detected: e.g. try +971823435432</li>
+        <li>Sending multiple requests from the same IP, or to the same phone number or phone number prefix will result in a velocity detection. <br>Try different combinations and check the evolution of the risk score</li>
+        <li>Using a VPN or a datacenter network to send the request will be detected.</li>
+        <li>Sending a request from an IP or to a phone number that is not in the core business countries (UAE, KSA, Egypt) will be detected.</li>
+        <li>Sending a request to a phone number in banned countries will be detected: e.g. try +6922353243</li>
+        <li>Sending an elevated number of requests from the same IP in a short duration will be blocked by WAF with rate limit, before even going to velocity checks.</li>
       </ol>
     </div>
   </div>
