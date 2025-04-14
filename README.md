@@ -12,7 +12,9 @@ The example solution is a static HTML hosted on S3, allowing users to make an AP
 
 ## Deployment steps
 
-It's mandatory to deploy the stack in us-east-1 region:
+>  At this stage, the code is experimental, and still being tested and worked on. It's not intented to be a production ready code, but rather to explain the different mitigation techniques through an example.
+
+It's mandatory to deploy the stack in ```us-east-1 region```:
 
 ```
 git clone https://github.com/achrafsouk/sms-pumping.git
@@ -23,7 +25,8 @@ cdk deploy
 
 Follow the steps in the landing page to test the protections.
 
->  At this stage, the code is experimental, and still being tested and worked on. It's not intented to be a production ready code, but rather to explain the different mitigation techniques through an example.
+<img src="demo-sms.png" width="500">
+
 
 ## Price considerations
 
