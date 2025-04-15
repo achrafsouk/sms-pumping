@@ -40,7 +40,7 @@ If the protections provided by the logic based on Pinpoint is not needed for you
 * **[AWS WAF]** We used multiple rules to mitigate DDoS attacks on the API, before the Lambda@Edge is even triggered. This is important especially that Pinpoint API has a 20 RPS limit.
 * **[AWS WAF]** Phone is validated against E.164 format.
 * **[AWS WAF]** A label is generated when requests match the API path, so it can be used to limit the scope of some subsequent rules, such as the low rate limit, to the OTP workflow.
-* **[AWS WAF]** We used signals from the Anonymous IP List managed rule, to detect IPs coming from VPNs and datacenters, contributing to the risk score calculation in Lambda@Edge. You can use other effective similar rules such as [Anonymous IP Advanced Protection by GeoGuard](https://aws.amazon.com/marketplace/pp/prodview-j4k2eobt6aaf6)
+* **[AWS WAF]** We used signals from the Anonymous IP List managed rule, to detect IPs coming from VPNs and datacenters, contributing to the risk score calculation in Lambda@Edge. You can use other effective similar rules such as [Anonymous IP Advanced Protection by GeoComply](https://aws.amazon.com/marketplace/pp/prodview-j4k2eobt6aaf6?sr=0-2&ref_=beagle&applicationId=AWSMPContessa)
 ).
 * **[AWS WAF]** Detected signals in AWS WAF are sent up streams to Lambda@Edge using request headers.
 * **[Lambda@Edge]** You can control the desired log level  in Lambda@Edge using ```LOG_LEVEL``` parameter.
